@@ -69,7 +69,7 @@ class Game extends PureComponent {
   };
 
   render() { 
-    const { tilesGuessed } = this.state;
+    const { tilesGuessed, guessesRemaining } = this.state;
     return (
       <div>
         {!tilesGuessed &&
@@ -78,6 +78,7 @@ class Game extends PureComponent {
         
         {tilesGuessed &&
           <Fragment>
+            <p>Guesses remaining: {guessesRemaining} </p>
             <Tiles tiles={this.state.tilesGuessed}/>
             <Form onSubmit={this.handleSingleGuess}/>
           </Fragment>
