@@ -52,7 +52,8 @@ __Other__
 * Instantiate new hangMan game if "Play Again" button is pressed. 
 * Iron out form so it only accepts acceptable characters.
 * Fix "Submit Entire Word" form so that it doesn't break app if incorrect guess is made. And to provide "New Game/Next Word" button if guess is correct.
-* Time estimate - three to five hours to have game completely ironed out after forementioned requirements are resolved. 
+* Deploy on Heroku. 
+* Time estimate - three to six hours to have game completely ironed out after forementioned requirements are resolved. 
 
 
 
