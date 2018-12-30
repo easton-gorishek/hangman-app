@@ -127,17 +127,18 @@ class Game extends PureComponent {
           </Fragment>
         }
 
-        {tilesGuessed && !fullWord && 
+        {tilesGuessed && !fullWord  &&
           <Form onSubmit={this.handleFullGuess} text='Submit Entire Word'/>
+        }
+        
+        {tilesGuessed &&
+          <button disabled={history.length <= 0 ? true : false} onClick={this.undoMove}>Undo</button>
         }
 
         {gameStatus && 
           <p>{gameStatus}</p>
         }
 
-  
-        <button disabled={history.length <= 0 ? true : false} onClick={this.undoMove}>Undo</button>
-  
       </div>
     );
   }
