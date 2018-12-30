@@ -8,7 +8,8 @@ class Form extends PureComponent {
   };
 
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    text: PropTypes.string.isRequired
   };
 
   handleChange = ({ target }) => {
@@ -21,11 +22,12 @@ class Form extends PureComponent {
 
   render() {
     const { guess } = this.state;
+    const { text } = this.props;
 
     return (
       <form onSubmit={this.handleSubmit}>
         <input value={guess} name="guess" onChange={this.handleChange}/>
-        <button>Submit Guess</button>
+        <button>{text}</button>
       </form>
     );
   }

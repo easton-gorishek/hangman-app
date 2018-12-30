@@ -2,13 +2,15 @@ import React, { PureComponent, Fragment } from 'react';
 import Tiles from './Tiles';
 import Form from './Form';
 import PropTypes from 'prop-types';
-import { startGame, updateGuess, loadGame } from '../../services/api';
+import { startGame, updateGuess, loadGame, guessEntireWord } from '../../services/api';
 import qs from 'query-string';
 
 class Game extends PureComponent {
   state = {
     tilesGuessed: null,
-    guessesRemaining: null
+    guessesRemaining: null,
+    gameStatus: null,
+    fullWord: false
   };
 
   static propTypes = {
@@ -58,6 +60,20 @@ class Game extends PureComponent {
     });
   };
 
+  handleFullGuess = (e, guess) => {
+    e.preventDefault();
+    const { history, location } = this.props;
+    const game = location.search.slice(6);
+    guessEntireWord({ guess, game }).then(res => {
+      this.setState({ ...res }, () => {
+        history.push({
+          pathname: '/',
+          search: qs.stringify({ game: res.key })
+        });
+      });
+    });
+  };
+
   loadGame = () => {
     const { location } = this.props;
     const game = location.search;
@@ -69,7 +85,12 @@ class Game extends PureComponent {
   };
 
   render() { 
-    const { tilesGuessed, guessesRemaining } = this.state;
+    const { 
+      tilesGuessed, 
+      guessesRemaining, 
+      gameStatus,
+      fullWord } = this.state;
+
     return (
       <div>
         {!tilesGuessed &&
@@ -80,8 +101,16 @@ class Game extends PureComponent {
           <Fragment>
             <p>Guesses remaining: {guessesRemaining} </p>
             <Tiles tiles={this.state.tilesGuessed}/>
-            <Form onSubmit={this.handleSingleGuess}/>
+            <Form onSubmit={this.handleSingleGuess} text='Submit Guess'/>
           </Fragment>
+        }
+
+        {tilesGuessed && !fullWord && 
+          <Form onSubmit={this.handleFullGuess} text='Submit Entire Word'/>
+        }
+
+        {gameStatus && 
+          <p>{gameStatus}</p>
         }
       </div>
     );
