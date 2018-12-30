@@ -2,15 +2,21 @@ import React, { PureComponent, Fragment } from 'react';
 import Tiles from './Tiles';
 import Form from './Form';
 import PropTypes from 'prop-types';
-import { startGame, updateGuess, loadGame, guessEntireWord } from '../../services/api';
 import qs from 'query-string';
+import { 
+  startGame, 
+  updateGuess, 
+  loadGame, 
+  guessEntireWord,
+  previousMove } from '../../services/api';
 
 class Game extends PureComponent {
   state = {
     tilesGuessed: null,
     guessesRemaining: null,
     gameStatus: null,
-    fullWord: false
+    fullWord: false,
+    history: []
   };
 
   static propTypes = {
@@ -84,12 +90,28 @@ class Game extends PureComponent {
     });
   };
 
+  undoMove = () => {
+    const { location, history } = this.props;
+    const game = location.search;
+
+    if(!game) return;
+    previousMove(game).then(res => {
+      this.setState({ ... res }, () => {
+        history.push({
+          pathname: '/',
+          search: qs.stringify({ game: res.key })
+        });
+      });
+    });
+  };
+
   render() { 
     const { 
       tilesGuessed, 
       guessesRemaining, 
       gameStatus,
-      fullWord } = this.state;
+      fullWord,
+      history } = this.state;
 
     return (
       <div>
@@ -112,6 +134,10 @@ class Game extends PureComponent {
         {gameStatus && 
           <p>{gameStatus}</p>
         }
+
+  
+        <button disabled={history.length <= 0 ? true : false} onClick={this.undoMove}>Undo</button>
+  
       </div>
     );
   }
